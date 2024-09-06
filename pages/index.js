@@ -1,4 +1,3 @@
-// pages/index.js
 import Link from 'next/link';
 import Head from 'next/head';
 
@@ -12,13 +11,17 @@ export default function Home({ topics }) {
       <h1>Welcome to My Site About Me</h1>
       <h2>Topics</h2>
       <ul>
-        {topics.map(topic => (
-          <li key={topic.id}>
-            <Link href={`/topic/${topic.id}`} passHref>
-              {topic.title}
-            </Link>
-          </li>
-        ))}
+        {topics.length > 0 ? (
+          topics.map(topic => (
+            <li key={topic.id}>
+              <Link href={`/topic/${topic.id}`}>
+                {topic.title}
+              </Link>
+            </li>
+          ))
+        ) : (
+          <li>No topics available.</li>
+        )}
       </ul>
     </div>
   );
@@ -26,6 +29,7 @@ export default function Home({ topics }) {
 
 export async function getServerSideProps() {
   try {
+    // Ensure this URL is correct for production
     const apiUrl = process.env.API_URL || 'http://localhost:3000/api/topics';
     const res = await fetch(apiUrl);
 

@@ -1,4 +1,3 @@
-// pages/topic/index.js
 import Link from 'next/link';
 import Head from 'next/head';
 
@@ -11,13 +10,17 @@ export default function TopicList({ topics }) {
       </Head>
       <h1>Topics</h1>
       <ul>
-        {topics.map(topic => (
-          <li key={topic.id}>
-            <Link href={`/topic/${topic.id}`}>
-              {topic.title}
-            </Link>
-          </li>
-        ))}
+        {topics.length > 0 ? (
+          topics.map(topic => (
+            <li key={topic.id}>
+              <Link href={`/topic/${topic.id}`}>
+                {topic.title}
+              </Link>
+            </li>
+          ))
+        ) : (
+          <li>No topics available.</li>
+        )}
       </ul>
     </div>
   );
@@ -25,6 +28,7 @@ export default function TopicList({ topics }) {
 
 export async function getServerSideProps() {
   try {
+    // Ensure this URL is correct for production
     const apiUrl = process.env.API_URL || 'http://localhost:3000/api/topics';
     const res = await fetch(apiUrl);
 
@@ -48,5 +52,3 @@ export async function getServerSideProps() {
     };
   }
 }
-
-
