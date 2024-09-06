@@ -29,12 +29,11 @@ export default function Home({ topics }) {
 
 export async function getServerSideProps() {
   try {
-    // Ensure this URL is correct for production
     const apiUrl = process.env.API_URL || 'http://localhost:3000/api/topics';
     const res = await fetch(apiUrl);
 
     if (!res.ok) {
-      throw new Error(`Error: ${res.status}`);
+      throw new Error(`Failed to fetch: ${res.status}`);
     }
 
     const topics = await res.json();
