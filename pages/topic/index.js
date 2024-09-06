@@ -24,7 +24,8 @@ export default function TopicList({ topics }) {
 }
 
 export async function getServerSideProps() {
-  const res = await fetch('http://localhost:3000/api/topics');
+  const apiUrl = process.env.API_URL || 'http://localhost:3000/api/topics';
+  const res = await fetch(apiUrl);
   const topics = await res.json();
 
   return {
@@ -33,3 +34,4 @@ export async function getServerSideProps() {
     },
   };
 }
+
