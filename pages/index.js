@@ -2,6 +2,9 @@ import Link from 'next/link';
 import Head from 'next/head';
 
 export default function Home({ topics }) {
+  // Log topics to validate data is received correctly
+  console.log('Topics received:', topics);
+
   return (
     <div>
       <Head>
@@ -26,6 +29,7 @@ export default function Home({ topics }) {
     </div>
   );
 }
+
 
 export async function getServerSideProps() {
   try {
