@@ -1,9 +1,13 @@
 import Link from 'next/link';
 import Head from 'next/head';
 
-export default function Home({ topics }) {
+export default function Home({ topics, error }) {
   // Log topics to validate data is received correctly
   console.log('Topics received:', topics);
+
+  if (error) {
+    return <div>Error fetching topics: {error}</div>;
+  }
 
   return (
     <div>
@@ -32,39 +36,28 @@ export default function Home({ topics }) {
 
 
 export async function getServerSideProps() {
-  try {
-    // Log the API URL to verify it's correct
-    const apiUrl = process.env.API_URL || 'http://localhost:3000/api/topics';
-    console.log('API URL being used:', apiUrl);
+  let topics = [];
+  let error = null;
 
-    // Fetch data from the API
+  try {
+    const apiUrl = process.env.API_URL || 'http://localhost:3000/api/topics';
     const res = await fetch(apiUrl);
 
     if (!res.ok) {
       throw new Error(`Failed to fetch: ${res.status}`);
     }
 
-    // Log the response status to ensure it's successful
-    console.log('Fetch response status:', res.status);
-
-    // Parse the response data
-    const topics = await res.json();
-
-    // Log the fetched data to verify it’s correct
-    console.log('Fetched topics:', topics);
-
-    return {
-      props: {
-        topics,
-      },
-    };
-  } catch (error) {
-    // Log any errors that occur during fetching
-    console.error('Failed to fetch topics:', error);
-    return {
-      props: {
-        topics: [],
-      },
-    };
+    topics = await res.json();
+  } catch (err) {
+    console.error('Error fetching topics:', err);
+    error = err.message;
   }
+
+  return {
+    props: {
+      topics,
+      error,
+    },
+  };
 }
+
