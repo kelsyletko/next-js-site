@@ -38,6 +38,9 @@ export async function getServerSideProps() {
 
     const topics = await res.json();
 
+    // Log fetched data to ensure it's correct
+    console.log('Fetched topics:', topics);
+
     return {
       props: {
         topics,
