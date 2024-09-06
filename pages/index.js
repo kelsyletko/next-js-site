@@ -40,7 +40,7 @@ export async function getServerSideProps() {
   let error = null;
 
   try {
-    const apiUrl = process.env.API_URL || 'http://localhost:3000/api/topics';
+    const apiUrl = "https://next-js-site-4rdq8q3wd-kelsy-lekos-projects.vercel.app/api/topics";
     const res = await fetch(apiUrl);
 
     if (!res.ok) {
