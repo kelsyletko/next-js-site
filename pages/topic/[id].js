@@ -1,5 +1,3 @@
-// pages/topic/[id].js
-import { useRouter } from 'next/router';
 import Head from 'next/head';
 
 export default function TopicPage({ topic }) {
@@ -19,13 +17,27 @@ export default function TopicPage({ topic }) {
 
 export async function getServerSideProps(context) {
   const { id } = context.params;
-  const res = await fetch(`http://localhost:3000/api/topics`);
-  const topics = await res.json();
-  const topic = topics.find((topic) => topic.id === parseInt(id));
+  const apiUrl = process.env.API_URL || 'http://localhost:3000/api/topics'; // Update API_URL for production
+  try {
+    const res = await fetch(apiUrl);
+    if (!res.ok) {
+      throw new Error(`Error: ${res.status}`);
+    }
 
-  return {
-    props: {
-      topic: topic || null,
-    },
-  };
+    const topics = await res.json();
+    const topic = topics.find((topic) => topic.id === parseInt(id));
+
+    return {
+      props: {
+        topic: topic || null,
+      },
+    };
+  } catch (error) {
+    console.error('Failed to fetch topic:', error.message);
+    return {
+      props: {
+        topic: null,
+      },
+    };
+  }
 }
