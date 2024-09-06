@@ -33,16 +33,24 @@ export default function Home({ topics }) {
 
 export async function getServerSideProps() {
   try {
+    // Log the API URL to verify it's correct
     const apiUrl = process.env.API_URL || 'http://localhost:3000/api/topics';
+    console.log('API URL being used:', apiUrl);
+
+    // Fetch data from the API
     const res = await fetch(apiUrl);
 
     if (!res.ok) {
       throw new Error(`Failed to fetch: ${res.status}`);
     }
 
+    // Log the response status to ensure it's successful
+    console.log('Fetch response status:', res.status);
+
+    // Parse the response data
     const topics = await res.json();
 
-    // Log fetched data to ensure it's correct
+    // Log the fetched data to verify it’s correct
     console.log('Fetched topics:', topics);
 
     return {
@@ -51,6 +59,7 @@ export async function getServerSideProps() {
       },
     };
   } catch (error) {
+    // Log any errors that occur during fetching
     console.error('Failed to fetch topics:', error);
     return {
       props: {
