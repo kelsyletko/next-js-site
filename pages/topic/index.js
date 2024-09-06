@@ -24,14 +24,29 @@ export default function TopicList({ topics }) {
 }
 
 export async function getServerSideProps() {
-  const apiUrl = process.env.API_URL || 'http://localhost:3000/api/topics';
-  const res = await fetch(apiUrl);
-  const topics = await res.json();
+  try {
+    const apiUrl = process.env.API_URL || 'http://localhost:3000/api/topics';
+    const res = await fetch(apiUrl);
 
-  return {
-    props: {
-      topics,
-    },
-  };
+    if (!res.ok) {
+      throw new Error(`Error: ${res.status}`);
+    }
+
+    const topics = await res.json();
+
+    return {
+      props: {
+        topics,
+      },
+    };
+  } catch (error) {
+    console.error('Failed to fetch topics:', error);
+    return {
+      props: {
+        topics: [],
+      },
+    };
+  }
 }
+
 
